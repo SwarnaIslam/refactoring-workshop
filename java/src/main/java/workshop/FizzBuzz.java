@@ -1,25 +1,25 @@
 package workshop;
 
-/**
- * Requirements:
- * For factor of three print Fizz instead of the number
- * For factor of five print Buzz instead of the number
- * For numbers which are factors of both three and five print FizzBuzz instead of the number
- */
 public class FizzBuzz {
     public static String say(int number) {
-        String strReturn = null;
-
-        if (number % 15 == 0) {
-            strReturn = "FizzBuzz";
-        } else {
-            if (number % 3 == 0) strReturn = "Fizz";
-
-            if (number % 5 == 0) strReturn = "Buzz";
+        if(isFizzBuzz(number)){
+            return "FizzBuzz";
         }
-
-        if (strReturn != null) return strReturn;
-
+        else if(isFizz(number)){
+            return "Fizz";
+        }
+        else if(isBuzz(number)){
+            return "Buzz";
+        }
         return String.valueOf(number);
+    }
+    private static boolean isFizz(int currentNumber){
+        return currentNumber%3==0;
+    }
+    private static boolean isBuzz(int currentNumber){
+        return currentNumber%5==0;
+    }
+    private static boolean isFizzBuzz(int currentNumber){
+        return currentNumber%15==0;
     }
 }
