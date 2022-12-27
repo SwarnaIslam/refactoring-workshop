@@ -4,76 +4,74 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+class HtmlUtil{
+    public Map<String, String> htmlEscape =new HashMap<>();
+    public HtmlUtil(){
+        htmlEscape.put("<","&lt");
+        htmlEscape.put(">","&gt");
+        htmlEscape.put("&","&amp");
+    }
+    protected String readTextFile() throws IOException {
+        return new String(Files.readAllBytes(Paths.get("sample.txt")));
+    }
+    public boolean isEndOfLine(String characterToConvert){
+        return characterToConvert=="\n";
+    }
+}
 
 public class PlaintextToHtmlConverter {
-    String source;
-    int i;
+    String text;
     List<String> result;
     List<String> convertedLine;
-    String characterToConvert;
+    HtmlUtil util=new HtmlUtil();
+    public RevisedHTML(){
+        result = new ArrayList<>();
+        convertedLine = new ArrayList<>();
+        try {
+            this.text = util.readTextFile();
+        }
+        catch (IOException e){
+            System.out.println(e);
+        }
+    }
 
     public String toHtml() throws Exception {
-        String text = read();
-        String htmlLines = basicHtmlEncode(text);
+        String htmlLines = basicHtmlEncode();
         return htmlLines;
     }
 
-    protected String read() throws IOException {
-        return new String(Files.readAllBytes(Paths.get("sample.txt")));
-    }
 
-    private String basicHtmlEncode(String source) {
-        this.source = source;
-        i = 0;
-        result = new ArrayList<>();
-        convertedLine = new ArrayList<>();
-        characterToConvert = stashNextCharacterAndAdvanceThePointer();
-
-        while (i <= this.source.length()) {
-            switch (characterToConvert) {
-                case "<":
-                    convertedLine.add("&lt;");
-                    break;
-                case ">":
-                    convertedLine.add("&gt;");
-                    break;
-                case "&":
-                    convertedLine.add("&amp;");
-                    break;
-                case "\n":
-                    addANewLine();
-                    break;
-                default:
-                    pushACharacterToTheOutput();
+    private String basicHtmlEncode() {
+        for (char character: this.text.toCharArray() ){
+            String characterToConvert=String.valueOf(character);
+            if(util.isEndOfLine(characterToConvert)){
+                addAnNewHtmlLine();
             }
-
-            if (i >= source.length()) break;
-
-            characterToConvert = stashNextCharacterAndAdvanceThePointer();
+            else if(util.htmlEscape.containsKey(characterToConvert)){
+                convertedLine.add(util.htmlEscape.get(characterToConvert));
+            }
+            else{
+                pushACharacterToTheOutput(characterToConvert);
+            }
         }
-        addANewLine();
-        String finalResult = String.join("<br />", result);
-        return finalResult;
+        return getFinalResult();
+    }
+    private String getFinalResult(){
+        addAnNewHtmlLine();
+        return String.join("<br />", result);
     }
 
-    //pick the character from source string
-    //and increment the pointer
-    private String stashNextCharacterAndAdvanceThePointer() {
-        char c = source.charAt(i);
-        i += 1;
-        return String.valueOf(c);
-    }
-
-    //stringfy convertedLine array and push into result
-    //reset convertedLine
-    private void addANewLine() {
+    private void addAnNewHtmlLine() {
         String line = String.join("", convertedLine);
         result.add(line);
-        convertedLine = new ArrayList<>();
+        convertedLine.clear();
     }
 
-    private void pushACharacterToTheOutput() {
+    private void pushACharacterToTheOutput(String characterToConvert) {
         convertedLine.add(characterToConvert);
     }
 }
