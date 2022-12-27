@@ -1,6 +1,6 @@
 # FizzBuzz class refactoring
-## conditional complexity
-It is not clear why strReturn should be set to different value based on condition.
+## Long method
+It is not clear why strReturn should be set to different value based on condition. It means the method is not being able to convey what it is doing.
 #### Remedies:
 **Method extraction:**
 Methods with meaningful name will be able reduce confusion to understand conditions.
