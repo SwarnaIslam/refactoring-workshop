@@ -46,12 +46,13 @@ In askQuestion(), instead of checking category type first and then operating on 
 ## Duplicate code
 **Extract method:**
 Process of determining next player is calculated many times. A method nextPlayer() is created to do the calculation.
-'''
+```
+
 private void nextPlayer(){
     currentPlayer++;
     if(currentPlayer==players.size())currentPlayer=0;
 }
-'''
+```
 Also duplicate code occurred in roll(), wasCorrectlyAnswered() which have been extracted using completeRoll() and correctAnswer() methods.
 ## Long Method
 #### Remedies:
