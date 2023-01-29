@@ -18,7 +18,7 @@ private static boolean isFizzBuzz(int currentNumber){
     
 ## Comment smell
 Comment was needed as the class was not self describing
-####Remedies:
+#### Remedies:
 As the method extraction was done to make the code self describing, comments are needed anymore
 # PlaintextToHtmlConverter class refactoring
 ## Inappropriate Naming
